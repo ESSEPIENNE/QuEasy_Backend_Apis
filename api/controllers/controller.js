@@ -1,8 +1,12 @@
 'use strict';
 
+var mongoose = require('mongoose'),
+    User = mongoose.model('User'),
+    Code = mongoose.model('Code');
+
 //handlers for /stores
 
-exports.list_all_shops = function(req, res){
+exports.get_all_shops = function(req, res){
     res.send('test');
 }
 

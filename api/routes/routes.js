@@ -5,7 +5,7 @@ module.exports = function(app) {
 
   
     app.route('/stores')
-        .get(contr.list_all_shops)
+        .get(contr.get_all_shops)
         .post(contr.create_a_shop);
 
 
