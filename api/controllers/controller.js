@@ -5,6 +5,12 @@ var mongoose = require('mongoose'),
     Code = mongoose.model('Code'),
     Store = mongoose.model('Store');
 
+var uniqid = require('uniqid');
+
+var secret = process.env.PSW_SECRET;
+
+const sha = require('simple-js-sha2-256');
+
 //handlers for /stores
 
 exports.get_all_stores = function(req, res){     //return all stores
@@ -18,6 +24,7 @@ exports.create_a_store = function (req, res){    //creates a new shop
     var new_store = new Store(req.body);
     new_store.save(function(err, store){
         if(err) res.send(err);
+        console.log(req.body);
         res.json(store);
     });
 }
@@ -45,14 +52,7 @@ exports.get_store_codes = function (req, res){
 
 }
 
-exports.create_code = function(req, res){
-    var new_code = new Code(req.body);
-    new_code.code = "45851618484684";
-    new_code.save(function(err, code){
-        if(err) res.send(err);
-        res.json(code);
-    });
-}
+
 
 //handlers for /stores/:storeId/codes/:code
 
@@ -68,6 +68,7 @@ exports.get_all_users = function (req, res){
 
 exports.create_user = function (req, res){
     var new_user = new User(req.body);
+    new_user.password = sha(req.body.password + secret);
     new_user.save(function(err, user){
         if(err) res.send(err);
         res.json(user);
@@ -89,6 +90,15 @@ exports.delete_user = function (req, res){
 }
 
 //handlers for /codes
+
+exports.create_code = function(req, res){
+    var new_code = new Code(req.body);
+    new_code.code = uniqid();
+    new_code.save(function(err, code){
+        if(err) res.send(err);
+        res.json(code);
+    });
+}
 
 exports.get_codes = function (req, res){
 

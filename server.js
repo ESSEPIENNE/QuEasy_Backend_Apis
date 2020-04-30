@@ -4,9 +4,10 @@ var dotenv = require('dotenv').config()
 var express = require('express'), 
     app = express(), 
     port = process.env.CONNECTION_PORT,
-    model_loading = require('./api/models/model.js')
-    bodyParser = require('body-parser'),
+    model_loading = require('./api/models/model.js'),
     mongoose = require('mongoose');
+
+var bodyParser = require('body-parser');
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
@@ -14,7 +15,6 @@ mongoose.connect(process.env.DB_PATH);
 
 app.listen(port);
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 var routes = require('./api/routes/routes.js'); 

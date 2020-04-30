@@ -1,4 +1,3 @@
-
 'use strict';
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
@@ -31,16 +30,16 @@ var CodeSchema = new Schema({
     status: {
         type: [{
             type: String,
-            enum: ['in_queue', 'in_store']
+            enum: ['inactive', 'in_queue', 'in_store']
         }],
-        default: ['in_queue']
+        default: ['inactive']
     },
     code_type:{
         type: [{
             type: String,
-            enum: ['one_time', 'all_day']
+            enum: ['all_time', 'all_day']
         }],
-        default: ['all_day']
+        default: ['one_time']
     },
     created_at: {
         type: Date,

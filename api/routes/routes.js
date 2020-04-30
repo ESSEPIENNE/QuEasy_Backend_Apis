@@ -15,8 +15,7 @@ module.exports = function(app) {
         .delete(contr.delete_a_store);
     
     app.route('/stores/:storeId/codes')
-        .get(contr.get_store_codes)
-        .post(contr.create_code);
+        .get(contr.get_store_codes);
     
     app.route('/stores/:storeId/codes/:code')
         .delete(contr.delete_store_code);
@@ -31,7 +30,8 @@ module.exports = function(app) {
         .delete(contr.delete_user);
     
     app.route('/codes')
-        .get(contr.get_codes);
+        .get(contr.get_codes)
+        .post(contr.create_code);
     
     app.route('/codes/:codeId')
         .get(contr.get_specific_code);
