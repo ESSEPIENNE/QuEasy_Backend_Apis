@@ -3,7 +3,7 @@
 //handlers for /stores
 
 exports.list_all_shops = function(req, res){
-    res.send('to mare omo');
+    res.send('test');
 }
 
 exports.create_a_shop = function (req, res){

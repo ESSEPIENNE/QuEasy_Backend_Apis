@@ -1,6 +1,9 @@
+//add and configure dotenv
+require('dotenv').config()
+
 var express = require('express'), 
     app = express(), 
-    port = process.env.PORT || 6969
+    port = process.env.CONNECTION_PORT
     bodyParser = require('body-parser');;
 
 app.listen(port);
