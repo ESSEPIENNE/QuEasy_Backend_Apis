@@ -5,21 +5,21 @@ module.exports = function(app) {
 
   
     app.route('/stores')
-        .get(contr.get_all_shops)
-        .post(contr.create_a_shop);
+        .get(contr.get_all_stores)
+        .post(contr.create_a_store);
 
 
     app.route('/stores/:storeId')
-        .get(contr.get_a_shop)
-        .put(contr.update_a_shop)
-        .delete(contr.delete_a_shop);
+        .get(contr.get_a_store)
+        .put(contr.update_a_store)
+        .delete(contr.delete_a_store);
     
     app.route('/stores/:storeId/codes')
-        .get(contr.get_shop_codes)
+        .get(contr.get_store_codes)
         .post(contr.create_code);
     
     app.route('/stores/:storeId/codes/:code')
-        .delete(contr.delete_shop_code);
+        .delete(contr.delete_store_code);
     
     app.route('/users')
         .get(contr.get_all_users)
