@@ -37,7 +37,7 @@ var CodeSchema = new Schema({
     code_type:{
         type: [{
             type: String,
-            enum: ['all_time', 'all_day']
+            enum: ['one_time', 'all_day']
         }],
         default: ['one_time']
     },
@@ -57,15 +57,18 @@ var CodeSchema = new Schema({
 var StoreSchema = new Schema({
     name: {
         type: String,
-        // required: 'Kindly enter the name of the store'
+        required: 'Kindly enter the name of the store'
     },
     max_queue: {
         type: Number,
-        // required: 'Kindly enter the max number of possible persons in queue'
+        required: 'Kindly enter the max number of possible persons in queue'
     },
     max_in_store: {
         type: Number,
-        // required: 'Kindly enter the max number of possible persons in store'
+        required: 'Kindly enter the max number of possible persons in store'
+    },
+    logo_path: {
+        type: String
     }
 });
 

@@ -8,7 +8,6 @@ module.exports = function(app) {
         .get(contr.get_all_stores)
         .post(contr.create_a_store);
 
-
     app.route('/stores/:storeId')
         .get(contr.get_a_store)
         .put(contr.update_a_store)
@@ -17,6 +16,9 @@ module.exports = function(app) {
     app.route('/stores/:storeId/codes')
         .get(contr.get_store_codes);
     
+    app.route('/stores/:storeId/logo')
+        .get(contr.get_a_store_logo);
+
     app.route('/stores/:storeId/codes/:code')
         .delete(contr.delete_store_code);
     
