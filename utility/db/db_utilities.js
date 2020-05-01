@@ -20,3 +20,7 @@ exports.find_user = async function(userId){
         return await User.findOne({'name': userId});
     }
 }
+
+// exports.check_availability = async function(storeId){
+//     var code_num = await Code.find({"sto"})
+// }

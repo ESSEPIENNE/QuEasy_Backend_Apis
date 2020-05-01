@@ -15,14 +15,17 @@ module.exports = function(app) {
     
     app.route('/stores/:storeId/codes')
         .get(contr.get_store_codes);
+
+    app.route('/stores/:storeId/codes/:code')
+    .post(contr.assign_code_to_store)
+    .delete(contr.delete_store_code);
     
     app.route('/stores/:storeId/logo')
         .get(contr.get_a_store_logo);
 
-    app.route('/stores/:storeId/codes/:code')
-        .post(contr.assign_code_to_store)
-        .delete(contr.delete_store_code);
-    
+    app.route('/stores/:storeId/available')
+        .get(contr.store_is_available);
+
     app.route('/users')
         .get(contr.get_all_users)
         .post(contr.create_user);
