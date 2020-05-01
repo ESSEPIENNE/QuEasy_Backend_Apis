@@ -20,6 +20,7 @@ module.exports = function(app) {
         .get(contr.get_a_store_logo);
 
     app.route('/stores/:storeId/codes/:code')
+        .post(contr.assign_code_to_store)
         .delete(contr.delete_store_code);
     
     app.route('/users')

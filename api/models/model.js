@@ -49,8 +49,9 @@ var CodeSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    store_id: {
-        type: String
+    store: {
+        type: mongoose.ObjectId,
+        default: null
     }
 });
 

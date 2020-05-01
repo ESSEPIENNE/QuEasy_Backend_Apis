@@ -9,6 +9,8 @@ var express = require('express'),
 
 var bodyParser = require('body-parser');
 
+process.env.TZ = 'Europe/Amsterdam'
+
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB_PATH);
