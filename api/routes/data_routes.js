@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = function(app) {
-  var contr = require('../controllers/controller.js');
-
+  var contr = require('../controllers/data_controller.js');
+  var auth = require('../controllers/auth_controller.js');
   
     app.route('/stores')
         .get(contr.get_all_stores)
@@ -17,8 +17,8 @@ module.exports = function(app) {
         .get(contr.get_store_codes);
 
     app.route('/stores/:storeId/codes/:code')
-    .post(contr.assign_code_to_store)
-    .delete(contr.delete_store_code);
+        .post(contr.assign_code_to_store)
+        .delete(contr.delete_store_code);
     
     app.route('/stores/:storeId/logo')
         .get(contr.get_a_store_logo);
@@ -27,7 +27,7 @@ module.exports = function(app) {
         .get(contr.store_is_available);
 
     app.route('/users')
-        .get(contr.get_all_users)
+        .get(passport.authenticate('jwt'), contr.get_all_users)
         .post(contr.create_user);
 
     app.route('/users/:userId')
@@ -41,4 +41,5 @@ module.exports = function(app) {
     
     app.route('/codes/:codeId')
         .get(contr.get_specific_code);
+
 };

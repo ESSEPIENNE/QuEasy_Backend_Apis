@@ -21,6 +21,10 @@ exports.find_user = async function(userId){
     }
 }
 
-// exports.check_availability = async function(storeId){
-//     var code_num = await Code.find({"sto"})
+// exports.check_queue_availability = async function(storeId){
+//     var code_num_queue = await Code.count({"store": storeId, "status": "in_queue"}).exec();
+//     // var code_num_store = await Code.count({"store": storeId, "status": "in_store"}).exec();
+//     var store = await Store.findById(storeId).exec();
+//     if(store.max_queue)
+//     console.log(store);
 // }

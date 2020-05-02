@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Code = mongoose.model('Code'),
     Store = mongoose.model('Store'),
-    db_utilities = require('../../utility/db/db_utilities.js');;
+    db_utilities = require('../../utility/db/db_utilities.js');
 
 const sha = require('simple-js-sha2-256');
 
@@ -79,8 +79,7 @@ exports.get_a_store_logo = function (req, res){
 //handlers for /stores/:storeId/available
 
 exports.store_is_available = async function (req, res){
-    // var codes_queue = await Code.count({'store': req.params.storeId}).exec();
-    // var max
+    db_utilities.check_availability(req.params.storeId);
 }
 
 //handlers for /stores/:storeId/codes
