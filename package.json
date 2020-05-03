@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "mongodb": "^3.5.7",
     "mongoose": "^5.9.11",
+    "next": "^9.3.6",
     "passport-jwt": "^4.0.0",
     "rand-token": "^1.0.1",
     "simple-js-sha2-256": "^1.0.7",

@@ -49,9 +49,7 @@ exports.update_a_store = function (req, res){
 }
 
 exports.delete_a_store = function (req, res){
-    console.log(req.params.storeId);
     Store.remove({"_id": req.params.storeId}), function(err){
-        console.log("ciao" + err);
         if(err) res.status(500).send('Something went wrong: \n' + err);
         res.json({'name': req.params.storeId});
     }
@@ -79,7 +77,9 @@ exports.get_a_store_logo = function (req, res){
 //handlers for /stores/:storeId/available
 
 exports.store_is_available = async function (req, res){
-    db_utilities.check_availability(req.params.storeId);
+    db_utilities.check_availability(req.params.storeId).then((avail_obj)=>{
+        res.json(avail_obj);
+    });
 }
 
 //handlers for /stores/:storeId/codes
@@ -99,23 +99,22 @@ exports.assign_code_to_store = async function(req,res){
     var storeId = req.params.storeId;
     var codeId = req.params.code;
     var store = await db_utilities.find_store(storeId);
-    var code = await Code.find({'code': codeId});
-    switch(code[0].status[0]){
+    var code = await Code.findOne({'code': codeId});
+    switch(code.status[0]){
         case 'inactive':
-            code[0].status = 'in_queue';
-            code[0].store = store._id;
+            code.status = 'in_queue';
+            code.store = store._id;
             break;
         case 'in_queue':
             code[0].status = 'in_store';
             break;
         case 'in_store':
-            code[0].status = 'inactive';
-            code[0].store = null;
+            code.status = 'inactive';
+            code.store = null;
             break;
     }
-    code[0].updated_at = new Date();
-    console.log(code[0]);
-    code[0].save();
+    code.updated_at = new Date();
+    code.save();
     res.send(code[0]);
 }
 

@@ -21,10 +21,24 @@ exports.find_user = async function(userId){
     }
 }
 
-// exports.check_queue_availability = async function(storeId){
-//     var code_num_queue = await Code.count({"store": storeId, "status": "in_queue"}).exec();
-//     // var code_num_store = await Code.count({"store": storeId, "status": "in_store"}).exec();
-//     var store = await Store.findById(storeId).exec();
-//     if(store.max_queue)
-//     console.log(store);
-// }
+exports.check_availability = async function(storeId){
+    const code_num_queue = await Code.count({"store": storeId, "status": "in_queue"}).exec();
+    const code_num_store = await Code.count({"store": storeId, "status": "in_store"}).exec();
+    const store = await Store.findById(storeId).exec();
+    var availability;
+    if(code_num_queue < store.max_queue){
+        availability = {
+            available: true,
+            currente_queue: code_num_queue,
+            max_queue: store.max_queue
+        }
+    } else {
+        availability = {
+            available: false,
+            currente_queue: code_num_queue,
+            max_queue: store.max_queue
+        }
+    }
+
+    return availability;
+}

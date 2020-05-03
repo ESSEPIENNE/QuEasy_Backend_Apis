@@ -43,8 +43,6 @@ app.use(function(req, res) {
     res.status(404).send({url: req.originalUrl + ' not found'})
 });
 
-
-
 passport.use(new JwtStrategy(passportOpts, function(jwtPayload, done){
     console.log(jwtPayload);
     const expirationDate = new Date(jwtPayload.exp * 1000);
