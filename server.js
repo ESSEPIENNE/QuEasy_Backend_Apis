@@ -57,4 +57,4 @@ passport.serializeUser(function (user, done) {
     done(null, user.username)
 });
 
-console.log('QuEasy RESTful API Server started on: ' + 7070);
+console.log('QuEasy RESTful API Server started on: ' + port);

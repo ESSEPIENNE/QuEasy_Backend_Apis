@@ -36,7 +36,7 @@ exports.create_a_store = function (req, res){    //creates a new shop
 
 //handlers for /stores/:storeId
 
-exports.get_a_store = function (req, res){
+exports.get_a_store = function (req, res){      //return a store specified by parameter storeId
     db_utilities.find_store(req.params.storeId).
     then((store)=>{
         if(store){
@@ -49,14 +49,14 @@ exports.get_a_store = function (req, res){
     });
 }
 
-exports.update_a_store = function (req, res){
+exports.update_a_store = function (req, res){   //updates a store specified by parameter storeId
     Store.findByIdAndUpdate(req.params.storeId, req.body, {new: true}, function(err, store){
         if(err) res.status(500).send("Something went wrong: \n" + err);
         res.json(store);
     })
 }
 
-exports.delete_a_store = function (req, res){
+exports.delete_a_store = function (req, res){   //deletes a store specified by parameter storeID
     Store.remove({"_id": req.params.storeId}), function(err){
         if(err) res.status(500).send('Something went wrong: \n' + err);
         res.json({'name': req.params.storeId});
@@ -65,7 +65,7 @@ exports.delete_a_store = function (req, res){
 
 //handlers for /stores/:storeId/logo
 
-exports.get_a_store_logo = function (req, res){
+exports.get_a_store_logo = function (req, res){ //returns store logo of the store specified by parameter storeId
     db_utilities.find_store(req.params.storeId).
     then((store)=>{
         if(store){
@@ -82,17 +82,9 @@ exports.get_a_store_logo = function (req, res){
     });
 }
 
-//handlers for /stores/:storeId/available
-
-exports.store_is_available = async function (req, res){
-    db_utilities.check_availability(req.params.storeId).then((avail_obj)=>{
-        res.json(avail_obj);
-    });
-}
-
 //handlers for /stores/:storeId/codes
 
-exports.get_store_codes = function (req, res){
+exports.get_store_codes = function (req, res){      //returns codes related to the store specified by parameter storeId
     Code.find({"store": req.params.storeId}, function(err, codes){
         if(err) res.status(500).send("Something went wrong: \n" + err);
         res.json(codes);
@@ -103,7 +95,7 @@ exports.get_store_codes = function (req, res){
 
 //handlers for /stores/:storeId/codes/:code
 
-exports.assign_code_to_store = async function(req,res){
+exports.assign_code_to_store = async function(req,res){     //assigns a store (param. storeId) a to a code (param. code) and changes code status
     var storeId = req.params.storeId;
     var codeId = req.params.code;
     var store = await db_utilities.find_store(storeId);
@@ -126,20 +118,20 @@ exports.assign_code_to_store = async function(req,res){
     res.send(code[0]);
 }
 
-exports.delete_store_code = function (req, res){
+exports.delete_store_code = function (req, res){       //ask
 
 }
 
 //handlers for /users
 
-exports.get_all_users = function (req, res){
+exports.get_all_users = function (req, res){        //returns all the users
     User.find({}, function(err, users){
         if(err) res.status(500).send(err);
         res.json(users);
     })
 }
 
-exports.create_user = function (req, res){
+exports.create_user = function (req, res){          //creates a new user
     var new_user = new User(req.body);
     new_user.password = sha(req.body.password + process.env.PSW_SECRET);
     new_user.save(function(err, user){
@@ -150,7 +142,7 @@ exports.create_user = function (req, res){
 
 //handlers for /users/:userId
 
-exports.get_user = function (req, res){
+exports.get_user = function (req, res){             //returns a user specified by parameter userId
     db_utilities.find_user(req.params.userId)
     .then((user)=>{
         if(user){
@@ -161,33 +153,33 @@ exports.get_user = function (req, res){
     });
 }
 
-exports.update_user = function (req, res){
+exports.update_user = function (req, res){          //updates a user specified by parameter userId
     User.findByIdAndUpdate(req.params.userId, req.body, {new: true}, function(err, user){
-        if(err) res.status(500).send('Something went wrong: \n' + err);
+        if(err) res.status(404).send('Something went wrong: \n' + err);
         res.json(user);
     });
 }
 
-exports.delete_user = function (req, res){
+exports.delete_user = function (req, res){          //deletes a user specified by parameter userId
     User.deleteOne({'_id': req.params.userId}, function(err){
-        if(err) res.status(500).sent("Something went wrong: \n"+err);
+        if(err) res.status(404).sent("Something went wrong: \n"+err);
         res.json({'_id': req.params.userId});
     });
 }
 
 //handlers for /codes
 
-exports.get_codes = function (req, res){
+exports.get_codes = function (req, res){            //returns all the codes
     Code.find({}, function(err,codes){
         if(err){
-            res.status(500).send('Something went wrong: \n' + err);
+            res.status(404).send('Something went wrong: \n' + err);
         } else {
             res.json(codes);
         }
     });
 }
 
-exports.create_code = function(req, res){
+exports.create_code = function(req, res){           //creates a new code
     var new_code = new Code(req.body);
     new_code.code = uniqid();
     new_code.save(function(err, code){
@@ -198,9 +190,9 @@ exports.create_code = function(req, res){
 
 //handlers for /codes/:codeId
 
-exports.get_specific_code = function (req, res){
+exports.get_specific_code = function (req, res){    //returns a code object specified by  codeId
     Code.findById(req.params.codeId, function(err, code){
-        if(err) res.status(500).send("Something went wrong: \n" + err);
+        if(err) res.status(404).send("Something went wrong: \n" + err);
         res.json(code);
     });
 }

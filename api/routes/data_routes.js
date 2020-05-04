@@ -23,9 +23,6 @@ module.exports = function(app) {
     app.route('/stores/:storeId/logo')
         .get(contr.get_a_store_logo);
 
-    app.route('/stores/:storeId/available')
-        .get(contr.store_is_available);
-
     app.route('/users')
         .get(passport.authenticate('jwt'), contr.get_all_users)
         .post(contr.create_user);
