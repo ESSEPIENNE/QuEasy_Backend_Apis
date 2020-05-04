@@ -47,6 +47,7 @@ passport.use(new JwtStrategy(passportOpts, function(jwtPayload, done){
     console.log(jwtPayload);
     const expirationDate = new Date(jwtPayload.exp * 1000);
     if(expirationDate < new Date()){
+        console.log("non valido");
         return done(null, false);
     }
     done(null, jwtPayload);

@@ -29,14 +29,18 @@ exports.check_availability = async function(storeId){
     if(code_num_queue < store.max_queue){
         availability = {
             available: true,
-            currente_queue: code_num_queue,
-            max_queue: store.max_queue
+            current_queue: code_num_queue,
+            max_queue: store.max_queue,
+            current_in_store: code_num_store,
+            max_in_store: store.max_in_store
         }
     } else {
         availability = {
             available: false,
-            currente_queue: code_num_queue,
-            max_queue: store.max_queue
+            current_queue: code_num_queue,
+            max_queue: store.max_queue,
+            current_in_store: code_num_store,
+            max_in_store: store.max_in_store
         }
     }
 

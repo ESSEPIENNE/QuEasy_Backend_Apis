@@ -12,9 +12,17 @@ const sha = require('simple-js-sha2-256');
 //handlers for /stores
 
 exports.get_all_stores = function(req, res){     //return all stores
-    Store.find({}, function(err, store){
+    Store.find({}, async function(err, stores){
         if(err) res.send(err);
-        res.json(store);
+        const new_stores = stores.map(async(store)=>{
+            let new_store = Object.assign({}, store.toObject());
+            new_store.current_in_queue = await Code.count({store: new_store._id, status: "in_queue"}).exec();
+            new_store.current_in_store = await Code.count({store: new_store._id, status: "in_store"}).exec();
+            return new_store;
+        });
+        Promise.all(new_stores).then((lista)=>{
+            res.json(lista);
+        });
     });
 }
 

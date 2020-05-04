@@ -8,7 +8,7 @@ const mongoose = require('mongoose'),
 
 exports.login = async function(req, res){
   const {email, password} = req.body;
-  const user = await User.findOne({email: email}).exec();
+  var user = await User.findOne({email: email}).exec();
   if(!user) res.status(401).send('Invalid credentials!');
   if(!auth_utilities.valid_password(password, user.password)) res.status(401).send('Invalid credentials!');
   const payload = {
@@ -16,16 +16,19 @@ exports.login = async function(req, res){
     'role': user.role
   }
   const token = jwt.sign(payload, process.env.JWT, { expiresIn: 600 });
-  const refreshToken = randtoken.uid(256);
-  await User.findOneAndUpdate({email: email}, {token: refreshToken});
+  if(!user){
+    user.token = randtoken.uid(256);
+    user.save();
+  }
   res.json({
     id: user._id,
     email: user.email,
     role: user.role[0],
     store: user.store,
     token: token, 
-    refreshToken: refreshToken
+    refreshToken: user.token
   });
+  
 }
 
 exports.logout = async function(req, res){
