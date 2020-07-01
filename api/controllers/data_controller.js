@@ -1,5 +1,7 @@
 'use strict';
 
+//functions for handling all the data requests
+
 var mongoose = require('mongoose'),
     uniqid = require('uniqid'),
     User = mongoose.model('User'),
@@ -97,16 +99,18 @@ exports.get_store_codes = function (req, res){      //returns codes related to t
 
 exports.assign_code_to_store = async function(req,res){     //assigns a store (param. storeId) a to a code (param. code) and changes code status
     var storeId = req.params.storeId;
+    console.log(req.params.code);
     var codeId = req.params.code;
     var store = await db_utilities.find_store(storeId);
     var code = await Code.findOne({'code': codeId});
+    console.log(code);
     switch(code.status[0]){
         case 'inactive':
             code.status = 'in_queue';
             code.store = store._id;
             break;
         case 'in_queue':
-            code[0].status = 'in_store';
+            code.status = 'in_store';
             break;
         case 'in_store':
             code.status = 'inactive';

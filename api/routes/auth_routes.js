@@ -1,5 +1,7 @@
 'use strict';
 
+//authentication routes definition
+
 module.exports = function(app) {
     var auth = require('../controllers/auth_controller.js');
 

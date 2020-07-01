@@ -1,10 +1,10 @@
 'use strict';
 
-const mongoose = require('mongoose'),
+  const mongoose = require('mongoose'),
   User = mongoose.model('User'),
   jwt = require('jsonwebtoken'),
   randtoken = require('rand-token'),
-  auth_utilities = require('../../utility/db/auth_utilities.js')
+  auth_utilities = require('../../utility/db/auth_utilities.js');
 
 exports.login = async function(req, res){
   const {email, password} = req.body;

@@ -1,5 +1,7 @@
 'use strict';
 
+//some random functions for authentication
+
 const sha = require('simple-js-sha2-256');
 
 exports.valid_password = function (given, saved){

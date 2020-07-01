@@ -1,3 +1,7 @@
+'use strict';
+
+//some random function for db interaction, I'll probably delete this file sometime in the future
+
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Code = mongoose.model('Code'),

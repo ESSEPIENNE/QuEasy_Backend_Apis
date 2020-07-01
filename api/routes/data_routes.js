@@ -1,8 +1,10 @@
 'use strict';
+var passport = require('passport');
+
+//data routes definition
 
 module.exports = function(app) {
-  var contr = require('../controllers/data_controller.js');
-  var auth = require('../controllers/auth_controller.js');
+    var contr = require('../controllers/data_controller.js');
   
     app.route('/stores')
         .get(contr.get_all_stores)
