@@ -1,5 +1,17 @@
 'use strict';
 var passport = require('passport');
+var server = require('../../server.js');
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, 'permesso/res/img');
+    },
+    filename: function(req, file, cb) {
+        cb(null, 'logo_' + file.fieldname + '.png')
+    }
+});
+var upload = multer({storage: storage});
+
 
 //data routes definition
 
@@ -8,7 +20,7 @@ module.exports = function(app) {
   
     app.route('/stores')
         .get(contr.get_all_stores)
-        .post(contr.create_a_store);
+        .post(upload.single('avatar'), contr.create_a_store);
 
     app.route('/stores/:storeId')
         .get(contr.get_a_store)

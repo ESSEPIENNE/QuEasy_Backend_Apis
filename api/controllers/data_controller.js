@@ -7,7 +7,8 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Code = mongoose.model('Code'),
     Store = mongoose.model('Store'),
-    db_utilities = require('../../utility/db/db_utilities.js');
+    db_utilities = require('../../utility/db/db_utilities.js'),
+    server = require('../../server.js');
 
 const sha = require('simple-js-sha2-256');
 
@@ -16,7 +17,7 @@ const sha = require('simple-js-sha2-256');
 exports.get_all_stores = function(req, res){     //return all stores
     Store.find({}, async function(err, stores){
         if(err) res.send(err);
-        const new_stores = stores.map(async(store)=>{
+        const new_stores = stores.map(async(store)=>{       //one day maybe i'll understand promises
             let new_store = Object.assign({}, store.toObject());
             new_store.current_in_queue = await Code.count({store: new_store._id, status: "in_queue"}).exec();
             new_store.current_in_store = await Code.count({store: new_store._id, status: "in_store"}).exec();
@@ -28,8 +29,13 @@ exports.get_all_stores = function(req, res){     //return all stores
     });
 }
 
-exports.create_a_store = function (req, res){    //creates a new shop
-    var new_store = new Store(req.body);
+exports.create_a_store = function (req, res){    //creates a new shop\
+    var new_store = new Store({
+        name: req.body.name,
+        max_in_store: req.body.max_in_store,
+        max_queue: req.body.max_queue
+    });
+    console.log(req.file);
     new_store.save(function(err, store){
         if(err) res.send(err);
         res.json(store);
@@ -103,27 +109,46 @@ exports.assign_code_to_store = async function(req,res){     //assigns a store (p
     var codeId = req.params.code;
     var store = await db_utilities.find_store(storeId);
     var code = await Code.findOne({'code': codeId});
-    console.log(code);
+    var event = '';
     switch(code.status[0]){
         case 'inactive':
             code.status = 'in_queue';
-            code.store = store._id;
+            code.store = store._id; 
+            event = 'Code arrived in queue';
             break;
         case 'in_queue':
             code.status = 'in_store';
+            event = 'Code entered the store';
             break;
         case 'in_store':
             code.status = 'inactive';
             code.store = null;
+            event = 'Code exited the store';
             break;
     }
     code.updated_at = new Date();
     code.save();
+    server.pusher.trigger('store-' + store._id, 'code-status-change', {    //canale per interfaccia web con id dello store come nome canale
+        'message': event
+    });
+    server.pusher.trigger("codechange", 'code-status-change', { //canale per l'app android per sapere che c'è stato un cambiamento
+        'message': event
+    });
     res.send(code[0]);
 }
 
-exports.delete_store_code = function (req, res){       //ask
-
+exports.delete_store_code = function (req, res){
+    var codeId = req.params.code;
+    var code = Code.findOne({'code': codeId}, function(err, codeFound){
+        if(err) res.status(500).send("Something went wrong while searching for the code: " + err);
+        else {
+            codeFound.store = null;
+            codeFound.status = 'inactive';
+            codeFound.save();
+            console.log("Code " + codeFound.code + " deactivated");
+            res.send(code.code);
+        }
+    });
 }
 
 //handlers for /users

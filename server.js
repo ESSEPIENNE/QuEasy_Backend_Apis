@@ -18,7 +18,9 @@ const express = require('express'),
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         secretOrKey: process.env.JWT
     },
-    cors = require('cors');
+    cors = require('cors'),
+    Pusher = require('pusher'),
+    multer = require('multer');
 
 //intializing passport.js for JWT Authorization and Authentication
 app.use(passport.initialize());
@@ -29,7 +31,7 @@ process.env.TZ = 'Europe/Amsterdam'
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB_PATH);
 
-app.listen(process.env.CONNECTION_PORT);
+app.listen(port);
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -58,4 +60,28 @@ passport.serializeUser(function (user, done) {
     done(null, user.username)
 });
 
-console.log('QuEasy restingapp API Server started on: ' + process.env.CONNECTION_PORT);
+//Pusher initialization
+exports.pusher = new Pusher({
+    appId: '1029426',
+    key: 'cdf5008e5b8bd9632817',
+    secret: '2573a15c33d453d5eead',
+    cluster: 'eu',
+    enableStats: true,
+    useTLS: true
+}); 
+
+Pusher.log = (msg) => {
+    console.log(msg);
+};
+
+//Configuration for store logo upload
+exports.storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, '.');
+    },
+    filename: function(req, file, cb) {
+        cb(null, 'logo_' + file.fieldname + '.png')
+    }
+});
+
+console.log('QuEasy restingapp API Server started on: ' + port);

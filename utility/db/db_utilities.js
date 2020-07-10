@@ -24,3 +24,21 @@ exports.find_user = async function(userId){
         return await User.findOne({'name': userId});
     }
 }
+
+exports.queue_availability = async function(storeId, max_in_queue){
+    people_in_queue = await Code.count({store: storeId, status: "in_queue"}).exec();
+    if(people_in_queue == max_in_queue){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+exports.store_availability = async function(storeId, max_in_store){
+    people_in_store = await Code.count({store: storeId, status: "in_store"}).exec();
+    if(people_in_store == max_in_store){
+        return false;
+    } else {
+        return true;
+    }
+}
